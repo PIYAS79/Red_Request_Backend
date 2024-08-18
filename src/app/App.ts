@@ -1,6 +1,8 @@
 import express, { NextFunction, Request, Response } from 'express';
 import cors from 'cors'
 import Global_Error_Handler from './errors/globalErrorHandler';
+import Route_Not_Found from './errors/routeNotFound';
+import router from './router';
 
 const app = express();
 
@@ -11,20 +13,18 @@ app.use(cors())
 
 
 // initial route
-app.get('/',(req:Request,res:Response)=>{
+app.get('/', (req: Request, res: Response) => {
     res.json({
-        success:true,
-        message:"Server Run Successfully !!"
+        success: true,
+        message: "Server Run Successfully !!"
     })
 })
 
+// project routes
+app.use('/api/v1', router)
+
 // route not found error 
-app.use('*',(req:Request,res:Response)=>{
-    res.json({
-        success:false,
-        message:"Route Not Found *"
-    })
-})
+app.use('*', Route_Not_Found)
 
 // global error route
 app.use(Global_Error_Handler)
