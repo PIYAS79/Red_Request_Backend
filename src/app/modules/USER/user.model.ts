@@ -46,6 +46,7 @@ const User_Schema = new Schema<User_Type>({
     password: {
         type: String,
         required: [true, "Password is required *"],
+        select: 0
     },
     contact: Contact_Schema,
     profile_image: {

@@ -10,6 +10,8 @@ const router = express.Router();
 
 // create user route
 router.post('/create', validationRequest(Zod_UserSchema), User_Controller.Create_User_Controller);
+// get all user 
+router.get('/', User_Controller.Get_All_User_Controller);
 
 
 export const user_router = router;
