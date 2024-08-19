@@ -6,7 +6,8 @@ import { User_Services } from "./user.services"
 
 const Create_User_Controller = Async_Catch(async (req: Request, res: Response, next: NextFunction) => {
 
-    const result = await User_Services.Create_User_Service();
+    console.log(req.body);
+    const result = await User_Services.Create_User_Service(req.body);
 
     res.json({
         success: true,

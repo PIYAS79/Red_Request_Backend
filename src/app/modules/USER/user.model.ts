@@ -1,5 +1,6 @@
 import { Schema, model } from "mongoose";
 import { Contact_Type, Name_Type, User_Type } from "./user.interface";
+import { encodeDatabyBcrypt } from "../../utils/bcrypt";
 
 
 const Name_Schema = new Schema<Name_Type>({
@@ -39,11 +40,12 @@ const User_Schema = new Schema<User_Type>({
     },
     email: {
         type: String,
-        required: [true, "Email is required *"]
+        required: [true, "Email is required *"],
+        unique: true
     },
     password: {
         type: String,
-        required: [true, "Password is required *"]
+        required: [true, "Password is required *"],
     },
     contact: Contact_Schema,
     profile_image: {
@@ -66,14 +68,25 @@ const User_Schema = new Schema<User_Type>({
         },
         required: [true, "Blood Grounp is required *"]
     },
-},{
-    timestamps:true,
-    toJSON:{
-        virtuals:true
+}, {
+    timestamps: true,
+    toJSON: {
+        virtuals: true
     }
 })
 
 
 
-export const User_Model = model<User_Type>('User',User_Schema);
+User_Schema.pre('save', async function (next) {
+    const newUser = this;
+    newUser.password = await encodeDatabyBcrypt(this.password);
+    next();
+})
+User_Schema.post('save', async function (doc, next) {
+    doc.password = '';
+    next();
+})
+
+
+export const User_Model = model<User_Type>('User', User_Schema);
 
