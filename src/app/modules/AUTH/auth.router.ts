@@ -8,3 +8,6 @@ const router = express.Router();
 
 
 router.post('/login', validationRequest(Zod_Login_Data_Type), authController.LoginUser_Controller);
+
+
+export const auth_Router = router;

@@ -78,6 +78,9 @@ const User_Schema = new Schema<User_Type>({
 
 
 
+
+
+
 User_Schema.pre('save', async function (next) {
     const newUser = this;
     newUser.password = await encodeDatabyBcrypt(this.password);

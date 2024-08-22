@@ -4,13 +4,13 @@ import { Auth_Services } from "./auth.services";
 
 
 
-const LoginUser_Controller = Async_Catch(async(req:Request,res:Response,next:NextFunction)=>{
-    
+const LoginUser_Controller = Async_Catch(async (req: Request, res: Response, next: NextFunction) => {
+
     const result = await Auth_Services.LoginUser_Service(req.body)
 
     res.json({
         success: true,
-        message: "Successfully Get All User",
+        message: "Successfully Login User",
         data: result
     })
 })
