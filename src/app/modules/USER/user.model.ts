@@ -1,5 +1,5 @@
 import { Schema, model } from "mongoose";
-import { Contact_Type, Name_Type, User_Type } from "./user.interface";
+import { Contact_Type, Name_Type, User_Type, isUserExistByEmail } from "./user.interface";
 import { encodeDatabyBcrypt } from "../../utils/bcrypt";
 
 
@@ -28,7 +28,7 @@ const Contact_Schema = new Schema<Contact_Type>({
 })
 
 
-const User_Schema = new Schema<User_Type>({
+const User_Schema = new Schema<User_Type,isUserExistByEmail>({
     name: Name_Schema,
     blood_group: {
         type: String,
@@ -77,8 +77,9 @@ const User_Schema = new Schema<User_Type>({
 })
 
 
-
-
+User_Schema.statics.isUserExist = async function (email: string) {
+    return await User_Model.findOne({ email:email }).select('+password');
+}
 
 
 User_Schema.pre('save', async function (next) {
@@ -92,5 +93,5 @@ User_Schema.post('save', async function (doc, next) {
 })
 
 
-export const User_Model = model<User_Type>('User', User_Schema);
+export const User_Model = model<User_Type,isUserExistByEmail>('User', User_Schema);
 

@@ -6,12 +6,15 @@ import { Auth_Services } from "./auth.services";
 
 const LoginUser_Controller = Async_Catch(async (req: Request, res: Response, next: NextFunction) => {
 
-    const result = await Auth_Services.LoginUser_Service(req.body)
+    const { Refresh_Token, Access_Token } = await Auth_Services.LoginUser_Service(req.body)
 
-    res.json({
+    res.cookie('refreshToken', Refresh_Token, {
+        httpOnly: true,
+        secure: true
+    }).json({
         success: true,
         message: "Successfully Login User",
-        data: result
+        data: { Access_Token }
     })
 })
 
