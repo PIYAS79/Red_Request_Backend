@@ -108,10 +108,33 @@ const Forget_Pass_Service = async (email: { email: string }) => {
     return "Check Your Email !"
 }
 
+// reset password service 
+const Reset_Password_Service = async (data: { email: string, newPassword: string }, user: JwtPayload) => {
+
+    const FoundUser = await User_Model.isUserExist(user.email) as User_Type;
+    // check both email are same or not 
+    if (user.email !== FoundUser.email) {
+        throw new Final_App_Error(httpStatus.FORBIDDEN, "Token-Email is not valid *")
+    }
+    // check is the user is found or not
+    if (!FoundUser) {
+        throw new Final_App_Error(httpStatus.NOT_FOUND, "User not found *");
+    }
+    // hash password 
+    const hashedPass = await encodeDatabyBcrypt(data.newPassword)
+    // is all ok then update user data
+    const result = await User_Model.findOneAndUpdate({ email: user.email }, {
+        password: hashedPass,
+        passwordChangeAt: new Date()
+    }, { new: true })
+
+    return result;
+}
 
 
 export const Auth_Services = {
     LoginUser_Service,
     Change_Pass_Service,
-    Forget_Pass_Service
+    Forget_Pass_Service,
+    Reset_Password_Service
 }

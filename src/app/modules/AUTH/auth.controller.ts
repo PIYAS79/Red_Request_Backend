@@ -31,8 +31,8 @@ const ChangePass_Controller = Async_Catch(async (req: Request, res: Response, ne
     })
 })
 
-// forget password type
-const Forget_Pass_Controller = Async_Catch(async(req:Request,res:Response,next:NextFunction)=>{
+// forget password controller
+const Forget_Pass_Controller = Async_Catch(async (req: Request, res: Response, next: NextFunction) => {
 
     const result = await Auth_Services.Forget_Pass_Service(req.body);
 
@@ -43,8 +43,22 @@ const Forget_Pass_Controller = Async_Catch(async(req:Request,res:Response,next:N
     })
 })
 
+// reset password controller 
+const Reset_Pass_Controller = Async_Catch(async (req: Request, res: Response, next: NextFunction) => {
+
+    const result = await Auth_Services.Reset_Password_Service(req.body,req.user);
+
+    res.json({
+        success: true,
+        message: "Successfully Forget Password !",
+        data: result
+    })
+})
+
+
 export const authController = {
     LoginUser_Controller,
     ChangePass_Controller,
-    Forget_Pass_Controller
+    Forget_Pass_Controller,
+    Reset_Pass_Controller
 }

@@ -3,7 +3,6 @@ import config from "../../config";
 import { Create_JWT_Token } from "../../utils/jwt";
 import { User_Type } from "./user.interface";
 import { User_Model } from "./user.model";
-import jwt from 'jsonwebtoken';
 
 
 
