@@ -2,13 +2,16 @@ import express, { NextFunction, Request, Response } from 'express';
 import cors from 'cors'
 import Global_Error_Handler from './errors/globalErrorHandler';
 import Route_Not_Found from './errors/routeNotFound';
+import cookieParser from 'cookie-parser';
 import router from './router';
+
 
 const app = express();
 
 // middlewares 
 app.use(express.json());
-app.use(cors())
+app.use(cors());
+app.use(cookieParser());
 
 
 

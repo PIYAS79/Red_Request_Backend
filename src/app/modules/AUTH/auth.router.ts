@@ -1,7 +1,7 @@
 import express from 'express'
 import { authController } from './auth.controller';
 import validationRequest from '../../middlewares/validationRequest';
-import { Zod_Change_Pass_Type, Zod_Forget_Pass_Type, Zod_Login_Data_Type, Zod_Reset_Password } from './auth.zod.validation';
+import { Zod_Change_Pass_Type, Zod_Forget_Pass_Type, Zod_Login_Data_Type, Zod_Refresh_Token, Zod_Reset_Password } from './auth.zod.validation';
 import validate_Token from '../../middlewares/tokenValidation';
 import { USER_ROLES } from '../../global/typeConstants';
 
@@ -18,8 +18,10 @@ router.patch('/change', validate_Token(USER_ROLES.ADMIN, USER_ROLES.DONOR, USER_
 router.patch('/forget', validationRequest(Zod_Forget_Pass_Type), authController.Forget_Pass_Controller);
 
 // reset password route
-router.patch('/reset',validate_Token(USER_ROLES.ADMIN, USER_ROLES.DONOR, USER_ROLES.REQUESTER),validationRequest(Zod_Reset_Password),authController.Reset_Pass_Controller);
+router.patch('/reset', validate_Token(USER_ROLES.ADMIN, USER_ROLES.DONOR, USER_ROLES.REQUESTER), validationRequest(Zod_Reset_Password), authController.Reset_Pass_Controller);
 
+// get refresh token route
+router.get('/refresh', validationRequest(Zod_Refresh_Token), authController.Get_Acc_Token_By_Refresh_Token_Controller);
 
 
 export const auth_Router = router;

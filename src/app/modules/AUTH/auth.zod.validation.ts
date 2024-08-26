@@ -27,3 +27,9 @@ export const Zod_Reset_Password = z.object({
         newPassword: z.string()
     })
 })
+
+export const Zod_Refresh_Token = z.object({
+    cookies: z.object({
+        refreshToken: z.string()
+    })
+})

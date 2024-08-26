@@ -1,12 +1,13 @@
-import httpStatus from "http-status";
+import httpStatus, { FAILED_DEPENDENCY } from "http-status";
 import Final_App_Error from "../../class/FinalApp_Error";
 import { User_Model } from "../USER/user.model"
 import { decodeDataByBcrypt, encodeDatabyBcrypt } from "../../utils/bcrypt";
 import config from "../../config";
 import { Create_JWT_Token } from "../../utils/jwt";
-import { JwtPayload } from "jsonwebtoken";
+import { JwtPayload, decode } from "jsonwebtoken";
 import { User_Type } from "../USER/user.interface";
 import { SendEmail } from "../../utils/nodeMailer";
+import jwt from 'jsonwebtoken';
 
 // login user service !
 const LoginUser_Service = async (data: { email: string, password: string }) => {
@@ -131,10 +132,42 @@ const Reset_Password_Service = async (data: { email: string, newPassword: string
     return result;
 }
 
+// get refreshtoken service
+const Get_Acc_Token_By_Refresh_Token_Service = async (refToken: string) => {
+
+    const decodeTokenData = jwt.decode(refToken) as JwtPayload;
+
+    // check if the user is exist or not 
+    const user = await User_Model.isUserExist(decodeTokenData.email);
+    if (!user) {
+        throw new Final_App_Error(httpStatus.NOT_FOUND, "User not found *");
+    }
+    // check is the user is blocked or not
+    if (user.status === 'Block') {
+        throw new Final_App_Error(httpStatus.FORBIDDEN, "This user is blocked *");
+    }
+    // check if the refresh token is valid or not 
+    if (user.passwordChangeAt && User_Model.is_JWT_Token_Exp_Check(user.passwordChangeAt, decodeTokenData.iat as number)) {
+        throw new Final_App_Error(httpStatus.UNAUTHORIZED, "You are not authorized *");
+    }
+
+    const accessToken = Create_JWT_Token({
+        data: {
+            email: user.email,
+            role: user.role
+        },
+        secret: config.token_secret as string,
+        exp: config.access_token_exp as string
+    })
+
+    return accessToken;
+}
+
 
 export const Auth_Services = {
     LoginUser_Service,
     Change_Pass_Service,
     Forget_Pass_Service,
-    Reset_Password_Service
+    Reset_Password_Service,
+    Get_Acc_Token_By_Refresh_Token_Service
 }

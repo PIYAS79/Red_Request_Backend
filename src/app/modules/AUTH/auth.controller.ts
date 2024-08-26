@@ -46,11 +46,24 @@ const Forget_Pass_Controller = Async_Catch(async (req: Request, res: Response, n
 // reset password controller 
 const Reset_Pass_Controller = Async_Catch(async (req: Request, res: Response, next: NextFunction) => {
 
-    const result = await Auth_Services.Reset_Password_Service(req.body,req.user);
+    const result = await Auth_Services.Reset_Password_Service(req.body, req.user);
 
     res.json({
         success: true,
-        message: "Successfully Forget Password !",
+        message: "Successfully Reset Password !",
+        data: result
+    })
+})
+
+// get refresh token controller 
+const Get_Acc_Token_By_Refresh_Token_Controller = Async_Catch(async (req: Request, res: Response, next: NextFunction) => {
+
+
+    const result = await Auth_Services.Get_Acc_Token_By_Refresh_Token_Service(req.cookies.refreshToken)
+
+    res.json({
+        success: true,
+        message: "Successfully Get Refresh Token !",
         data: result
     })
 })
@@ -60,5 +73,6 @@ export const authController = {
     LoginUser_Controller,
     ChangePass_Controller,
     Forget_Pass_Controller,
-    Reset_Pass_Controller
+    Reset_Pass_Controller,
+    Get_Acc_Token_By_Refresh_Token_Controller
 }
