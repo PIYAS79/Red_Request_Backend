@@ -28,7 +28,7 @@ const Contact_Schema = new Schema<Contact_Type>({
 })
 
 
-const User_Schema = new Schema<User_Type,isUserExistByEmail>({
+const User_Schema = new Schema<User_Type, isUserExistByEmail>({
     name: Name_Schema,
     blood_group: {
         type: String,
@@ -69,6 +69,9 @@ const User_Schema = new Schema<User_Type,isUserExistByEmail>({
         },
         required: [true, "Blood Grounp is required *"]
     },
+    passwordChangeAt: {
+        type: Date
+    }
 }, {
     timestamps: true,
     toJSON: {
@@ -78,9 +81,13 @@ const User_Schema = new Schema<User_Type,isUserExistByEmail>({
 
 
 User_Schema.statics.isUserExist = async function (email: string) {
-    return await User_Model.findOne({ email:email }).select('+password');
+    return await User_Model.findOne({ email: email }).select('+password');
 }
 
+User_Schema.statics.is_JWT_Token_Exp_Check = function (PassChangeAt: Date, jwtIssued: number) {
+    const PasswordChangeTime = new Date(PassChangeAt).getTime() / 1000;
+    return PasswordChangeTime > jwtIssued;
+}
 
 User_Schema.pre('save', async function (next) {
     const newUser = this;
@@ -93,5 +100,5 @@ User_Schema.post('save', async function (doc, next) {
 })
 
 
-export const User_Model = model<User_Type,isUserExistByEmail>('User', User_Schema);
+export const User_Model = model<User_Type, isUserExistByEmail>('User', User_Schema);
 

@@ -1,5 +1,4 @@
 import jwt from 'jsonwebtoken';
-import config from '../config';
 
 type createJWT_Token_Type = {
     data: { email: string, role: string },

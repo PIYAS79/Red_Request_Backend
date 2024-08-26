@@ -1,4 +1,4 @@
-import { Model } from "mongoose"
+import { Date, Model } from "mongoose"
 
 export type Name_Type = {
     f_name: string,
@@ -19,10 +19,12 @@ export type User_Type = {
     contact: Contact_Type,
     profile_image: string,
     status: 'Active' | 'Block',
-    role: 'Donor' | "Requester" | "Admin"
+    role: 'Donor' | "Requester" | "Admin",
+    passwordChangeAt?: Date
 }
 
 // custom static method
 export interface isUserExistByEmail extends Model<User_Type> {
-    isUserExist(email: string): Promise<User_Type>
+    isUserExist(email: string): Promise<User_Type>,
+    is_JWT_Token_Exp_Check(PassChangeAt: Date, jwtIssued: number): boolean,
 } 

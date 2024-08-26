@@ -15,7 +15,7 @@ const Create_User_Service = async (data: User_Type) => {
             email: data.email,
             role: data.role
         },
-        secret: config.acc_token_secret as string,
+        secret: config.token_secret as string,
         exp: config.access_token_exp as string
     })
     const refreshToken = Create_JWT_Token({
@@ -23,7 +23,7 @@ const Create_User_Service = async (data: User_Type) => {
             email: data.email,
             role: data.role
         },
-        secret: config.ref_token_secret as string,
+        secret: config.token_secret as string,
         exp: config.refresh_token_exp as string
     })
 

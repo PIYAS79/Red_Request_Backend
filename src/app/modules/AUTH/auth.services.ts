@@ -1,9 +1,10 @@
 import httpStatus from "http-status";
 import Final_App_Error from "../../class/FinalApp_Error";
 import { User_Model } from "../USER/user.model"
-import { decodeDataByBcrypt } from "../../utils/bcrypt";
+import { decodeDataByBcrypt, encodeDatabyBcrypt } from "../../utils/bcrypt";
 import config from "../../config";
 import { Create_JWT_Token } from "../../utils/jwt";
+import { JwtPayload } from "jsonwebtoken";
 
 // login user service !
 const LoginUser_Service = async (data: { email: string, password: string }) => {
@@ -25,14 +26,12 @@ const LoginUser_Service = async (data: { email: string, password: string }) => {
     }
 
 
-
-
     const Refresh_Token = Create_JWT_Token({
         data: {
             email: isUserExistByEmail.email,
             role: isUserExistByEmail.role
         },
-        secret: config.ref_token_secret as string,
+        secret: config.token_secret as string,
         exp: config.refresh_token_exp as string
     })
     const Access_Token = Create_JWT_Token({
@@ -40,13 +39,39 @@ const LoginUser_Service = async (data: { email: string, password: string }) => {
             email: isUserExistByEmail.email,
             role: isUserExistByEmail.role
         },
-        secret: config.acc_token_secret as string,
+        secret: config.token_secret as string,
         exp: config.access_token_exp as string
     })
 
     return { Refresh_Token, Access_Token }
 }
 
+// change password service 
+const Change_Pass_Service = async (data: { newPass: string, oldPass: string }, user: JwtPayload) => {
+
+    const tokenUser = await User_Model.isUserExist(user.email);
+    if (!tokenUser) {
+        throw new Final_App_Error(httpStatus.NOT_FOUND, "User Not Found *");
+    }
+    // check the user password
+    if (! await decodeDataByBcrypt(tokenUser.password, data.oldPass)) {
+        throw new Final_App_Error(httpStatus.UNAUTHORIZED, "Unauthorized Access Found *");
+    }
+    // is all ok 
+    const newHashedPass = await encodeDatabyBcrypt(data.newPass);
+    const result = await User_Model.findOneAndUpdate(
+        { email: user.email },
+        {
+            password: newHashedPass,
+            passwordChangeAt: new Date(),
+        },
+        { new: true }
+    );
+
+    return result;
+}
+
 export const Auth_Services = {
-    LoginUser_Service
+    LoginUser_Service,
+    Change_Pass_Service
 }

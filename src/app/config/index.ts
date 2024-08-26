@@ -15,6 +15,5 @@ export default {
     salt_round: process.env.SALT_ROUND,
     access_token_exp: process.env.ACC_TOKEN_EXP,
     refresh_token_exp: process.env.REF_TOKEN_EXP,
-    acc_token_secret: process.env.ACC_SECRET,
-    ref_token_secret: process.env.REF_SECRET
+    token_secret: process.env.ACC_SECRET,
 }
