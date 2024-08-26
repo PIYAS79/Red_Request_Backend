@@ -16,4 +16,7 @@ export default {
     access_token_exp: process.env.ACC_TOKEN_EXP,
     refresh_token_exp: process.env.REF_TOKEN_EXP,
     token_secret: process.env.ACC_SECRET,
+    central_email:process.env.CENTER_EMAIL,
+    mail_secret:process.env.MAIL_SECRET,
+    frontend_url:process.env.FRONTEND_URL
 }

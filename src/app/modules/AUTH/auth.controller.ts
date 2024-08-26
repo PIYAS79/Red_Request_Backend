@@ -31,7 +31,20 @@ const ChangePass_Controller = Async_Catch(async (req: Request, res: Response, ne
     })
 })
 
+// forget password type
+const Forget_Pass_Controller = Async_Catch(async(req:Request,res:Response,next:NextFunction)=>{
+
+    const result = await Auth_Services.Forget_Pass_Service(req.body);
+
+    res.json({
+        success: true,
+        message: "Successfully Forget Password !",
+        data: result
+    })
+})
+
 export const authController = {
     LoginUser_Controller,
     ChangePass_Controller,
+    Forget_Pass_Controller
 }
