@@ -7,7 +7,7 @@ import { Jwt, JwtPayload } from "jsonwebtoken";
 // login controller 
 const LoginUser_Controller = Async_Catch(async (req: Request, res: Response, next: NextFunction) => {
 
-    const { Refresh_Token, Access_Token } = await Auth_Services.LoginUser_Service(req.body)
+    const { Refresh_Token, Access_Token,me } = await Auth_Services.LoginUser_Service(req.body)
 
     res.cookie('refreshToken', Refresh_Token, {
         httpOnly: true,
@@ -15,7 +15,7 @@ const LoginUser_Controller = Async_Catch(async (req: Request, res: Response, nex
     }).json({
         success: true,
         message: "Successfully Login User",
-        data: { Access_Token }
+        data: { me,Access_Token }
     })
 })
 

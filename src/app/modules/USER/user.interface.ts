@@ -17,10 +17,11 @@ export type User_Type = {
     email: string,
     password: string,
     contact: Contact_Type,
-    profile_image: string,
+    profile_image?: string,
     status: 'Active' | 'Block',
-    role: 'Donor' | "Requester" | "Admin",
-    passwordChangeAt?: Date
+    role: 'Donor' | "Requester" | "Admin" | "Both",
+    passwordChangeAt?: Date,
+    gender: 'male' | 'female'
 }
 
 // custom static method

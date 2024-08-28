@@ -21,9 +21,10 @@ const Zod_UserSchema = z.object({
         email: z.string().email(),
         password: z.string(),
         contact: Zod_ContactSchema,
-        profile_image: z.string(),
+        profile_image: z.string().optional(),
         status: z.enum(['Active', 'Block']),
-        role: z.enum(['Donor', 'Requester', 'Admin']),
+        role: z.enum(['Donor', 'Requester', 'Admin','Both']),
+        gender:z.enum(['male','female'])
     })
 });
 

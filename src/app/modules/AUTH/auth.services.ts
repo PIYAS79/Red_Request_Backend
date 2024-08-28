@@ -46,7 +46,7 @@ const LoginUser_Service = async (data: { email: string, password: string }) => {
         exp: config.access_token_exp as string
     })
 
-    return { Refresh_Token, Access_Token }
+    return { Refresh_Token, Access_Token, me:isUserExistByEmail }
 }
 
 // change password service 

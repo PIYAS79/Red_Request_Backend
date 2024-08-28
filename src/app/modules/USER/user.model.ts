@@ -51,7 +51,6 @@ const User_Schema = new Schema<User_Type, isUserExistByEmail>({
     contact: Contact_Schema,
     profile_image: {
         type: String,
-        required: [true, "Profile Image is Required *"]
     },
     status: {
         type: String,
@@ -64,13 +63,21 @@ const User_Schema = new Schema<User_Type, isUserExistByEmail>({
     role: {
         type: String,
         enum: {
-            values: ['Donor', "Requester", "Admin"],
+            values: ['Donor', "Requester", "Admin","Both"],
             message: '{VALUE} is not assignable *'
         },
         required: [true, "Blood Grounp is required *"]
     },
     passwordChangeAt: {
         type: Date
+    },
+    gender:{
+        type:String,
+        enum:{
+            values:['male','female'],
+            message: '{VALUE} is not assignable *'
+        },
+        required: [true, "Gender is required *"]
     }
 }, {
     timestamps: true,
