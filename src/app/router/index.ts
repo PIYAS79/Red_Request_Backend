@@ -2,6 +2,7 @@
 import express from 'express';
 import { user_router } from '../modules/USER/user.router';
 import { auth_Router } from '../modules/AUTH/auth.router';
+import { bank_Router } from '../modules/BANK/bank.router';
 
 const router = express.Router()
 
@@ -13,6 +14,10 @@ const project_routes = [
     {
         path: '/auth',
         route: auth_Router
+    },
+    {
+        path: '/bank',
+        route: bank_Router
     },
 ]
 
